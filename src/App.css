@@ -1,6 +1,10 @@
 .App-header {
   text-align: center;
 }
+.App-header h2 {
+  margin: 0;
+  padding: 20px 0;
+}
 
 .pools .hunt-tile-list li {
   margin: 0 8px 8px 0;
@@ -114,10 +118,6 @@
   padding-left: 20px;
 }
 
-.svg-icon {
-  width: 10px;
-}
-
 /* Hunt Tile styles*/
 
 .hunt-tile {
@@ -161,15 +161,13 @@
 }
 .hunt-tile .icons {
   position: relative;
-  top: -34px;
 }
-.hunt-tile .eye-icon {
+.hunt-tile .img-damage-icon {
   width: 162px;
-  padding-bottom: 12px;
+  padding: 20px 0;
 }
 .hunt-tile.has-icons .damage {
   position: relative;
-  top: -6px;
 }
 .hunt-tile.f {
   background: #94abbd;
@@ -191,9 +189,17 @@
   border-radius: 12px;
   margin: 0 auto 20px;
 }
-.hunt-tile.big .damage {
+.hunt-tile.big .damage .number {
   font-size: 156px;
+  line-height: 1;
 }
 .hunt-tile.big .reveal-icon {
   width: 56px; 
+}
+.hunt-tile.big .reveal-icon + .stop-icon {
+  padding-left: 6%;
+}
+.hunt-tile.big .stop-icon {
+  width: 28px;
+  padding-left: 35%;
 }

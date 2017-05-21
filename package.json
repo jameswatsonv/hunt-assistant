@@ -1,16 +1,17 @@
 {
   "name": "hunt-assistant",
   "version": "0.1.0",
-  "private": true,
-  "homepage": "http://jameswatsonv.github.io/hunt-assistant",
+  "homepage": "https://jameswatsonv.github.io/hunt-assistant",
   "dependencies": {
     "lodash": "^4.17.4",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   },
   "devDependencies": {
+    "enzyme": "^2.8.2",
     "gh-pages": "^1.0.0",
-    "react-scripts": "0.9.5"
+    "react-scripts": "0.9.5",
+    "react-test-renderer": "^15.5.4"
   },
   "scripts": {
     "start": "react-scripts start",
