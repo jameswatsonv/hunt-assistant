@@ -32,3 +32,10 @@ it('discards the current tile with the discard button', () => {
   wrapper.find('.controls .discard-button').simulate('click');
   expect(wrapper.state().discarded.length).toEqual(1);
 });
+
+it('sets aside the current tile with the set aside button', () => {
+  const wrapper = mount(<App />);
+  wrapper.getNode().drawTile();
+  wrapper.find('.controls .set-aside-button').simulate('click');
+  expect(wrapper.state().setAside.length).toEqual(1);
+});

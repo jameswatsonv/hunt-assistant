@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 import _ from 'lodash';
-import HuntTile from './HuntTile.js';
+
+import SpecialTileToggles from './components/SpecialTileToggles.js';
+import OptionsMenu from './components/OptionsMenu.js';
+import HuntTile from './components/HuntTile.js';
+import PoolIcon from './components/PoolIcon.js';
 import { STARTING_HUNT_POOL, SPECIAL_TILES } from './hunt_tiles.js';
 
 function supportsLocalStorage() {
@@ -22,7 +26,14 @@ function getInitialState() {
     setAside: [],
     current: null,
     inMordor: false,
+    smallViewport: isSmallViewport(),
+    tab: 'pool',
+    optionsOpen: false,
+    appLog: [],
   };
+}
+function isSmallViewport() {
+  return window.matchMedia('screen and (max-width: 48em)').matches;
 }
 function serialize(obj) {
   return JSON.stringify(obj);
@@ -41,27 +52,37 @@ class App extends Component {
     this.appendFromCollection = this.appendFromCollection.bind(this);
     this.addSpecialTile = this.addSpecialTile.bind(this);
     this.isSpecialTileAdded = this.isSpecialTileAdded.bind(this);
+    this.setTab = this.setTab.bind(this);
     this.enterMordor = this.enterMordor.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleResize = this.handleResize.bind(this);
+    this.checkViewportSize = this.checkViewportSize.bind(this);
+    this.confirmReset = this.confirmReset.bind(this);
     this.updateState = this.updateState.bind(this);
   }
 
   componentDidMount() {
-    
-    if (window && window.document) {
-      window.document.addEventListener('keydown', this.handleKeyDown, true);
+    // use component container instead of window?
+    if (window) {
+      window.addEventListener('resize', this.handleResize, true);
+      if (window.document) {
+        window.document.addEventListener('keydown', this.handleKeyDown, true);
+      }
     }
     if (supportsLocalStorage()) {
       this.localStorageSupported = true;
       if (localStorage.getItem('state')) {
-        this.setState(parse(localStorage.getItem('state')));
+        return this.setState(parse(localStorage.getItem('state')), this.checkViewportSize);
       }
     }
   }
 
   componentWillUnmount() {
-    if (window && window.document) {
-      window.document.removeEventListener('keydown', this.handleKeyDown, true);
+    if (window) {
+      window.removeEventListener('resize', this.handleResize, true);
+      if (window.document) {
+        window.document.removeEventListener('keydown', this.handleKeyDown, true);
+      }
     }
   }
 
@@ -72,6 +93,25 @@ class App extends Component {
       });
     }
     return this.setState(state);
+  }
+
+  checkViewportSize() {
+    let { smallViewport } = this.state;
+    if (smallViewport && !isSmallViewport()) {
+      this.updateState({ smallViewport : false });
+    }
+    if (!smallViewport && isSmallViewport()) {
+      this.updateState({ smallViewport : true });
+    }
+  }
+
+  handleResize(e) {
+    if (!this.resizeTimeout) {
+      this.resizeTimeout = window.setTimeout(() => {
+       this.resizeTimeout = null;
+       this.checkViewportSize();
+      }, 125);
+    }
   }
 
   handleKeyDown(e) {
@@ -93,7 +133,13 @@ class App extends Component {
       this.enterMordor();
     }
     // P = reset
-    if (e.keyCode === 80 && window.confirm('Do you want to reset?')) {
+    if (e.keyCode === 80) {
+      this.confirmReset();
+    }
+  }
+
+  confirmReset() {
+    if (window.confirm('Are you sure you want to reset?')) {
       this.updateState(getInitialState());
     }
   }
@@ -107,20 +153,16 @@ class App extends Component {
   }
 
   isSpecialTileAdded(tile) {
-    if (this.state.current === tile) {
-      return true;
-    }
-    return _.some(
-      _.flatten(
-        _.values(
-          _.pick(
-            this.state,
-            ['pool', 'setAside', 'discarded', 'removed']
-          )
-        )
-      ),
-      t => t === tile,
-    );
+    return this.state.current === tile ||
+      _(this.state)
+      .pick(['pool', 'setAside', 'discarded', 'removed'])
+      .values()
+      .flatten()
+      .some(t => t === tile);
+  }
+
+  setTab(tab) {
+    this.updateState({ tab })
   }
 
   drawTile() {
@@ -176,9 +218,72 @@ class App extends Component {
   }
 
   render() {
-    const { current, inMordor, setAside } = this.state;
-    const { appendFromCollection } = this;
-    const isCurrentTileSpecial = _.get(SPECIAL_TILES, current);
+    const { appendFromCollection, setTab, drawTile, enterMordor, addSpecialTile, isSpecialTileAdded, confirmReset, updateState } = this;
+    const { current, inMordor, setAside, optionsOpen } = this.state;
+    const isCurrentTileSpecial = _.get(SPECIAL_TILES, current, false);
+    if (this.state.smallViewport) {
+      return (
+        <div className='App mobile'>
+          <OptionsMenu {...{ optionsOpen, inMordor, enterMordor, addSpecialTile, isSpecialTileAdded, confirmReset, updateState }} />
+          <div className='m-button-wrap'>
+            <button className='pure-button pure-button-large free' disabled={current} onClick={drawTile}>Draw Tile</button>
+          </div>
+          <div className='current-tile'>
+            <HuntTile
+              tile={current}
+              big={true}
+              smallViewport={true} />
+          </div>
+          <SpecialTileInfo
+            tile={isCurrentTileSpecial}
+            smallViewport={true} />
+          <div className='m-button-wrap'>
+            <button className='pure-button discard-button' disabled={!current} onClick={() => appendFromCollection('current', null, 'discarded')}>
+              <PoolIcon pool='discarded' />
+              {' '}
+              Discard
+            </button>
+            <button className='pure-button set-aside-button' disabled={!current || setAside.length >= 3} onClick={() => appendFromCollection('current', null, 'setAside')}>
+              Set Aside
+              {' '}
+              <PoolIcon pool='setAside' />
+            </button>
+          </div>
+          <div className='pure-menu pure-menu-horizontal'>
+            <ul className='pure-menu-list pure-g m-tab-list'>
+              {
+                _.map(
+                  [
+                    { name: 'Hunt Pool', pool: 'pool', cols: '2-5' },
+                    { pool: 'discarded', cols: '1-5' },
+                    { pool: 'removed', cols: '1-5' },
+                    { name: 'Set Aside', pool: 'setAside', cols: '1-5' },
+                  ],
+                  ({ name, pool, cols }, i) => <li className={`pure-menu-item pure-u-${cols}`} key={`tabs${i}`}>
+                      <button className='pure-button' onClick={() => setTab(pool)}>{ pool === 'pool' ? 'Hunt Pool' : <PoolIcon pool={pool} /> } ({this.state[pool].length})</button>
+                    </li>,
+                )
+              }
+            </ul>
+            <div className='m-tab-tiles pure-menu pure-menu-horizontal'>
+              <ul className='pure-menu-list'>
+                {
+                  _.map(this.state[this.state.tab],
+                    (tile, i) => <li className='pure-menu-item' key={`tilepool${i}`}>
+                      <HuntTile
+                        {...{ tile, appendFromCollection }}
+                        smallViewport={true}
+                        pool={this.state.tab}
+                        poolIndex={i} />
+                    </li>
+                  )
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="App">
         <div className="App-header">
@@ -199,17 +304,10 @@ class App extends Component {
               <HuntTile
                 tile={current}
                 big={true} />
-              { 
-                isCurrentTileSpecial ? <div className={`current-tile-name ${isCurrentTileSpecial.special}`}>
-                  { isCurrentTileSpecial.name }
-                </div> : null
-              }
+              <SpecialTileInfo tile={isCurrentTileSpecial} />
               <MainControls
-                current={current}
-                setAside={setAside}
-                inMordor={inMordor}
+                {...{current, inMordor, setAside, appendFromCollection}}
                 drawTile={this.drawTile}
-                appendFromCollection={appendFromCollection}
                 enterMordor={this.enterMordor} />
               <HelpText />
             </div>
@@ -224,6 +322,12 @@ class App extends Component {
     );
   }
 }
+const SpecialTileInfo = ({tile, smallViewport}) => (
+  tile ?
+    <div className={['current-tile-name', tile.special, smallViewport ? 'small-viewport' : ''].join(' ')}>
+      { tile.name }
+    </div> : null
+);
 class SetAsideTiles extends Component {
   render() {
     const { tiles, appendFromCollection } = this.props;
@@ -245,19 +349,19 @@ class SetAsideTiles extends Component {
                           <ul className='pure-menu-list'>
                             <li className='pure-menu-item'>
                               <button className='pure-button' onClick={() => appendFromCollection('setAside', i, 'pool')}>
-                                <i className='fa fa-arrow-left' aria-hidden="true" />
+                                <PoolIcon pool='pool' />
                                 Return to Pool
                               </button>
                             </li>
                             <li className='pure-menu-item'>
                               <button className='pure-button' onClick={() => appendFromCollection('setAside', i, 'discarded')}>
-                                <i className="fa fa-trash" aria-hidden="true" />
+                                <PoolIcon pool='discarded' />
                                 Discard
                               </button>
                             </li>
                             <li className='pure-menu-item'>
                               <button className='pure-button' onClick={() => appendFromCollection('setAside', i, 'removed')}>
-                                <i className="fa fa-ban" aria-hidden="true" />
+                                <PoolIcon pool='removed' />
                                 Remove
                               </button>
                             </li>
@@ -308,12 +412,14 @@ const MainControls = ({current, setAside, inMordor, drawTile, appendFromCollecti
       <button className='pure-button pure-button-large free' disabled={current} onClick={drawTile}>Draw Tile</button>
     </div>
     <button className='pure-button discard-button' disabled={!current} onClick={() => appendFromCollection('current', null, 'discarded')}>
-      <i className='fa fa-trash' aria-hidden="true" />&nbsp;
+      <PoolIcon pool='discarded' />
+      {' '}
       Discard
     </button>
     <button className='pure-button set-aside-button' disabled={!current || setAside.length >= 3} onClick={() => appendFromCollection('current', null, 'setAside')}>
-      Set Aside &nbsp;
-      <i className='fa fa-arrow-right' aria-hidden='true' />
+      Set Aside
+      {' '}
+      <PoolIcon pool='setAside' />
     </button>
     <div className='draw-button'>
       <button className='pure-button pure-button-large shadow' disabled={inMordor} onClick={enterMordor}>{ inMordor ? 'FSP in Mordor' : 'Enter Mordor' }</button>
@@ -324,20 +430,20 @@ const MainControls = ({current, setAside, inMordor, drawTile, appendFromCollecti
 // Will need to do some state management for a small viewport version of hunt pool
 class HuntPools extends Component {
   render() {
-    const { pool, discarded, removed, appendFromCollection } = this.props;
-    const renderTileList = (tiles, name) => (
+    const props = this.props;
+    const renderTileList = tilePool => (
       <div className='pure-menu pure-menu-horizontal'>
         <ul className='pure-menu-list hunt-tile-list'>
         {
-          tiles.length > 0 ?
-            _.map(tiles, (t, i) =>
-              <li className='pure-menu-item' key={`${name}${i}`}>
+          props[tilePool].length > 0 ?
+            _.map(props[tilePool], (t, i) =>
+              <li className='pure-menu-item' key={`tilepool${i}`}>
                 <HuntTile
                   tile={t}
                   withOverlay={true}
-                  pool={name}
+                  pool={tilePool}
                   poolIndex={i}
-                  appendFromCollection={appendFromCollection} />
+                  appendFromCollection={props.appendFromCollection} />
               </li>
             ) : '<Empty>'
         }
@@ -350,19 +456,19 @@ class HuntPools extends Component {
           <li className='pure-menu-item'>
             <div className='hunt-pool'>
               <h2>Hunt Pool</h2>
-              { renderTileList(pool, 'pool') }
+              { renderTileList('pool') }
             </div>
           </li>
           <li className='pure-menu-item'>
             <div className='discarded-pool'>
-              <h3><i className='fa fa-trash fa-lg' aria-hidden='true' /> Discarded</h3>
-              { renderTileList(discarded, 'discarded') }
+              <h3><PoolIcon pool='discarded' big={true} /> Discarded</h3>
+              { renderTileList('discarded') }
               </div>
           </li>
           <li className='pure-menu-item'>
             <div className='removed-pool'>
-              <h3><i className='fa fa-ban fa-lg' aria-hidden='true' /> Removed</h3>
-              { renderTileList(removed, 'removed') }
+              <h3><PoolIcon pool='removed' big={true} /> Removed</h3>
+              { renderTileList('removed') }
             </div>
           </li>
         </ul>
@@ -370,45 +476,5 @@ class HuntPools extends Component {
     )
   }
 }
-
-const renderSpecialTileButton = (tileInfo, props) => (
-  <li className="pure-menu-item" key={`toggle${tileInfo.value}`}>
-    <button className={`pure-button tile-button ${tileInfo.special}`} disabled={props.isSpecialTileAdded(tileInfo.value)} onClick={() => props.addSpecialTile(tileInfo.value)}>{tileInfo.name}</button>
-  </li>
-);
-const renderButtonGroup = (specialTiles, props) => (
-  <div className='pure-menu pure-menu-horizontal' key={`toggle-${props.side}`}>
-    <ul className="pure-menu-list">
-      {
-        _.map(
-          specialTiles,
-          tileInfo => renderSpecialTileButton(tileInfo, props)
-        )
-      }
-    </ul>
-  </div> 
-);
-const SpecialTileToggles = (props) => (
-  <div className='pure-g special-tile-buttons'>
-  {
-    _.map(
-      _.keys(SPECIAL_TILES),
-      side => (
-        <div className='pure-u-1-2' key={`toggle-c-${side}`}>
-          {
-            renderButtonGroup(
-              _.map(
-                SPECIAL_TILES[side],
-                (t, k) => _.assign({ value: `${side}.${k}` }, t)
-              ),
-              _.assign({ side }, props),
-            )
-          }
-        </div>
-      )
-    )
-  }
-  </div>
-)
 
 export default App;

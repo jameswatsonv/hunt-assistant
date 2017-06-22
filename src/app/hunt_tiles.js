@@ -1,23 +1,23 @@
 import _ from 'lodash';
 
-import st0r from './images/tiles/0r.png';
-import st1 from './images/tiles/1.png';
-import st1r from './images/tiles/1r.png';
-import st2 from './images/tiles/2.png';
-import st2r from './images/tiles/2r.png';
-import st3 from './images/tiles/3.png';
-import stEr from './images/tiles/Er.png';
-import f0 from './images/tiles/0.png';
-import f1 from './images/tiles/-1.png';
-import f2 from './images/tiles/-2.png';
-import s1rs from './images/tiles/1rs.png';
-import s3s from './images/tiles/3s.png';
-import sErs from './images/tiles/Ers.png';
-import sSs from './images/tiles/Ss.png';
-import revealIconSrc from './images/reveal-icon.png';
-import eyeIconSrc from './images/eye-icon.png';
-import stopIconSrc from './images/stop-icon.png';
-import shelobIconSrc from './images/shelob-icon.png';
+import st0r from './../images/tiles/0r.png';
+import st1 from './../images/tiles/1.png';
+import st1r from './../images/tiles/1r.png';
+import st2 from './../images/tiles/2.png';
+import st2r from './../images/tiles/2r.png';
+import st3 from './../images/tiles/3.png';
+import stEr from './../images/tiles/Er.png';
+import f0 from './../images/tiles/0.png';
+import f1 from './../images/tiles/-1.png';
+import f2 from './../images/tiles/-2.png';
+import s1rs from './../images/tiles/1rs.png';
+import s3s from './../images/tiles/3s.png';
+import sErs from './../images/tiles/Ers.png';
+import sSs from './../images/tiles/Ss.png';
+import revealIconSrc from './../images/reveal-icon.png';
+import eyeIconSrc from './../images/eye-icon.png';
+import stopIconSrc from './../images/stop-icon.png';
+import shelobIconSrc from './../images/shelob-icon.png';
 
 const STARTING_HUNT_POOL = ['0r', '0r', '1r', '1r', '2r', '1', '1', '2', '2', '3', '3', '3', 'Er', 'Er', 'Er', 'Er'];
 const SPECIAL_TILE_VALUES = {
@@ -101,4 +101,4 @@ export {
   STARTING_HUNT_POOL,
   SPECIAL_TILES,
   imgSrcs,
-} 
+}
