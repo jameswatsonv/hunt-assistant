@@ -17,6 +17,7 @@ export const initialState = {
 };
 
 export function reducer(state, action) {
+  //console.log('reducer called for action: ', action.type);
   switch (action.type) {
     case 'draw':
       const huntPool = state[POOL];
@@ -28,10 +29,10 @@ export function reducer(state, action) {
       return {...state, [CURRENT]: null, [DISCARDED]: state[DISCARDED].concat(state[CURRENT])};
     case 'set-aside':
         return {...state, [CURRENT]: null, [SETASIDE]: state[SETASIDE].concat(state[CURRENT])};
-    case 'move-tile':
-      const { indecesOfTilesToMove, fromGroup, toGroup } = action.payload;
-      const updatedFromGroup = state[fromGroup].filter((t, i) => !indecesOfTilesToMove.includes(i))
-      const updatedToGroup = state[toGroup].concat(state[fromGroup].filter((t, i) => indeces.includes(i)));
+    case 'move':
+      const { indecesToMove, fromGroup, toGroup } = action;
+      const updatedFromGroup = state[fromGroup].filter((t, i) => !indecesToMove.includes(i))
+      const updatedToGroup = state[toGroup].concat(state[fromGroup].filter((t, i) => indecesToMove.includes(i)));
       return {...state, [fromGroup]: updatedFromGroup, [toGroup]: updatedToGroup};
     case 'reset':
       return initialState;
