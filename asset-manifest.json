@@ -1,6 +1,23 @@
 {
-  "main.css": "static/css/main.12d988c6.css",
-  "main.css.map": "static/css/main.12d988c6.css.map",
-  "main.js": "static/js/main.6d11c6c4.js",
-  "main.js.map": "static/js/main.6d11c6c4.js.map"
+  "files": {
+    "main.css": "/hunt-assistant/static/css/main.7dc574fa.chunk.css",
+    "main.js": "/hunt-assistant/static/js/main.a5598567.chunk.js",
+    "main.js.map": "/hunt-assistant/static/js/main.a5598567.chunk.js.map",
+    "runtime-main.js": "/hunt-assistant/static/js/runtime-main.496d61ce.js",
+    "runtime-main.js.map": "/hunt-assistant/static/js/runtime-main.496d61ce.js.map",
+    "static/js/2.d25e4875.chunk.js": "/hunt-assistant/static/js/2.d25e4875.chunk.js",
+    "static/js/2.d25e4875.chunk.js.map": "/hunt-assistant/static/js/2.d25e4875.chunk.js.map",
+    "index.html": "/hunt-assistant/index.html",
+    "precache-manifest.6185b1a742a8a4ea8ebaccc98c1aa1a2.js": "/hunt-assistant/precache-manifest.6185b1a742a8a4ea8ebaccc98c1aa1a2.js",
+    "service-worker.js": "/hunt-assistant/service-worker.js",
+    "static/css/main.7dc574fa.chunk.css.map": "/hunt-assistant/static/css/main.7dc574fa.chunk.css.map",
+    "static/js/2.d25e4875.chunk.js.LICENSE.txt": "/hunt-assistant/static/js/2.d25e4875.chunk.js.LICENSE.txt",
+    "static/media/stop.eb4d5164.svg": "/hunt-assistant/static/media/stop.eb4d5164.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.496d61ce.js",
+    "static/js/2.d25e4875.chunk.js",
+    "static/css/main.7dc574fa.chunk.css",
+    "static/js/main.a5598567.chunk.js"
+  ]
 }
