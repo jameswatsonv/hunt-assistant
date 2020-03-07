@@ -43,7 +43,7 @@
   .hunt-tile .extras {
     display: flex;
     justify-content: center;
-    padding: 0px 6px;
+    padding: 0px 16px;
   }
   
   .hunt-tile .reveal, .hunt-tile .stop {
@@ -56,13 +56,23 @@
     width: 30px;
     text-align: center;
   }
+  .hunt-tile .reveal .reveal-icon {
+    background-size: cover;
+    height: 12px;
+  }
   .hunt-tile.small .reveal {
     height: 9px;
     width: 23px;
   }
+  .hunt-tile.small .reveal .reveal-icon {
+    height: 9px;
+  }
   .hunt-tile.large .reveal {
     height: 24px;
     width: 60px;
+  }
+  .hunt-tile.large .reveal .reveal-icon {
+    height: 24px;
   }
   
   .hunt-tile .stop {
