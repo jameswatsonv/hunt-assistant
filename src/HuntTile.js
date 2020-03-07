@@ -21,7 +21,7 @@ function Reveal({ revealStyle }) {
 
 function HuntTile({ tile = '', small, large }) {
   if (!tile) {
-    return <div className={cx('hunt-tile', { small, large })}></div>;
+    return <div className={cx('hunt-tile', 'empty', { small, large })}></div>;
   }
 
   const damage = tile.charAt(0);

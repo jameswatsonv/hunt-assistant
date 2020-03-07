@@ -9,3 +9,8 @@ export const SETASIDE = 'setAside';
 export const DISCARDED = 'discarded';
 export const POOL = 'huntPool';
 export const CURRENT = 'current';
+export const POOL_LABELS = {
+    [REMOVED]: 'Removed',
+    [DISCARDED]: 'Discarded',
+    [POOL]: 'Hunt Pool',
+};

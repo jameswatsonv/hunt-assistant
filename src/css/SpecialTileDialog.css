@@ -1,0 +1,33 @@
+.special-tile-dialog {
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    border-bottom: 1px solid #F0F0F0;
+    border-radius: 3px;
+    box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.25);
+    padding: 30px 0 30px;
+    background: white;
+}
+
+.special-tile-dialog.hide {
+    z-index: 0;
+}
+
+.special-tile-dialog p {
+    max-width: 80vw;
+    margin: 0 auto 20px;
+}
+
+.special-tile-dialog .special-tiles {
+    max-width: 350px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+.special-tile-dialog .special-tiles .tile-wrapper {
+    flex: 1 0 21%;
+    margin: 0 0 20px;
+}
