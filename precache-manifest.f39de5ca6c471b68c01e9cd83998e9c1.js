@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b66a5d0ebfea99405b747ca5bbcabe71",
+    "revision": "c63b01e1b115e5b3c449cb64e64f9a5b",
     "url": "/hunt-assistant/index.html"
   },
   {

@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/hunt-assistant/precache-manifest.6185b1a742a8a4ea8ebaccc98c1aa1a2.js"
+  "/hunt-assistant/precache-manifest.f39de5ca6c471b68c01e9cd83998e9c1.js"
 );
 
 self.addEventListener('message', (event) => {
