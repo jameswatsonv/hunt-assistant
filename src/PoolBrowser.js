@@ -38,8 +38,8 @@ function PoolBrowser({ state, btnClasses, moveTileButtonClick }) {
           </div>
           <div className='buttons'>
             {
-              buttonsByGroup[currentTab].map(group =>
-              <button className={btnClasses({small: true})} onClick={() => moveTileButtonClick(i, currentTab, group)}>{POOL_LABELS[group]}</button>
+              buttonsByGroup[currentTab].map((group, j) =>
+              <button key={`pooltilebutton${i}${j}`} className={btnClasses({small: true})} onClick={() => moveTileButtonClick(i, currentTab, group)}>{POOL_LABELS[group]}</button>
               )
             }
           </div>
