@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c63b01e1b115e5b3c449cb64e64f9a5b",
+    "revision": "6b759b5b02d07dab80c0e751832a2a69",
     "url": "/hunt-assistant/index.html"
   },
   {
-    "revision": "565198667e4db1d840fd",
-    "url": "/hunt-assistant/static/css/main.7dc574fa.chunk.css"
+    "revision": "bcc9b867c13a2d9a3fcc",
+    "url": "/hunt-assistant/static/css/main.2a4cb4d4.chunk.css"
   },
   {
     "revision": "9fba30105f5cca49fb36",
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/hunt-assistant/static/js/2.d25e4875.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "565198667e4db1d840fd",
-    "url": "/hunt-assistant/static/js/main.a5598567.chunk.js"
+    "revision": "bcc9b867c13a2d9a3fcc",
+    "url": "/hunt-assistant/static/js/main.cab2352d.chunk.js"
   },
   {
     "revision": "951d0aaa2d3ae3934704",
